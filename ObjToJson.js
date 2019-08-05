@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const fileReadDir = path.join("./", "files_to_read");
 let hello = "Hello world from nodejs";
-const fileToRead = "myoby.obj";
+const fileToRead = "Example.obj";
 hello = false;
 
 const getFloatsBySpace = /\S[\d\-\.]+/gi; //match anything with whitespace preceeding it that is a number or . or -
@@ -48,8 +48,6 @@ let objFile = fs.readFileSync(path.join(fileReadDir, fileToRead), "UTF-8");
 ObjToJson(objFile);
 //write a json file with nodejs
 function ObjToJson(file) {
-  let lineStart = 0;
-  let lineEnd = 0;
   let thisLine = "";
 
   let vCount = 0;
@@ -58,13 +56,13 @@ function ObjToJson(file) {
   let fCount = 0;
   for (i = 0; i < file.length; i++) {
     if (file[i] === "\n") {
-      lineStart = lineEnd + 1;
-      lineEnd = i;
+      if(file[i+1] === undefined){break;}//if eof get the heeeeelll outa there
       thisLine = "";
-      for (let j = lineStart; j < lineEnd; j++) {
-        thisLine += file[j];
+      let lineStart = i+2; //the next two charecters are useless in all cases after \n 
+      while (file[lineStart] !== ("\n")){//gather data until next occurance of newline, === because you can never trust == lol
+        thisLine += file[lineStart];
+        lineStart++;
       }
-      //console.log(thisLine);
       continue;
     } else if (thisLine === '') {
       continue;
