@@ -11,13 +11,10 @@ const getFloatsBySpace = /\S[\d\-\.]+/gi; //match anything with whitespace prece
 const getFileExtension = /\.[\w]+/gi; //match anything with letters preceeded by a .
 const getFloatsBySlash = /[\-\.\d]+/gi; //match anything that contains . - or is a number
 
-global.console.log(
-  `we are in the file...${path.basename(__filename)}`
-); // plucks filename from path
+global.console.log(`we are in the file...${path.basename(__filename)}`); // plucks filename from path
 global.console.log(hello || path);
 global.console.log(__dirname);
 global.console.log(__filename);
-
 
 let writtenfile = {
   vertexs: [
@@ -56,38 +53,41 @@ function ObjToJson(file) {
   let fCount = 0;
   for (i = 0; i < file.length; i++) {
     if (file[i] === "\n") {
-      if(file[i+1] === undefined){break;}//if eof get the heeeeelll outa there
+      if (file[i + 1] === undefined) {
+        break;
+      } //if eof get the heeeeelll outa there
       thisLine = "";
-      let lineStart = i+2; //the next two charecters are useless in all cases after \n 
-      while (file[lineStart] !== ("\n")){//gather data until next occurance of newline, === because you can never trust == lol
+      let lineStart = i + 2; //the next two charecters are useless in all cases after \n
+      while (file[lineStart] !== "\n") {
+        //gather data until next occurance of newline, === because you can never trust == lol
         thisLine += file[lineStart];
         lineStart++;
       }
       continue;
-    } else if (thisLine === '') {
+    } else if (thisLine === "") {
       continue;
     } else if (file[i] + file[i + 1] === "f ") {
       fCount++;
       let vertFace = {};
-      vertFace["face "+fCount] = thisLine.match(getFloatsBySlash);
+      vertFace["face " + fCount] = thisLine.match(getFloatsBySlash);
       writtenfile.face.push(vertFace);
       continue;
     } else if (file[i] + file[i + 1] === "v ") {
       vCount++;
       let vert = {};
-      vert["vert "+vCount] = thisLine.match(getFloatsBySpace);
+      vert["vert " + vCount] = thisLine.match(getFloatsBySpace);
       writtenfile.vertexs.push(vert);
       continue;
     } else if (file[i] + file[i + 1] === "vt") {
-      vnCount++;
+      vtCount++;
       let uv = {};
-      uv["uv "+vnCount] = thisLine.match(getFloatsBySpace);
+      uv["uv " + vtCount] = thisLine.match(getFloatsBySpace);
       writtenfile.uvs.push(uv);
       continue;
     } else if (file[i] + file[i + 1] === "vn") {
       vnCount++;
       let vertNrm = {};
-      vertNrm["normal "+vnCount] = thisLine.match(getFloatsBySpace);
+      vertNrm["normal " + vnCount] = thisLine.match(getFloatsBySpace);
       writtenfile.normals.push(vertNrm);
       continue;
     } else {
